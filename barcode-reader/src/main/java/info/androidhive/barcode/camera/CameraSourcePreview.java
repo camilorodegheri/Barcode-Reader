@@ -38,7 +38,7 @@ public class CameraSourcePreview extends ViewGroup {
     private boolean mStartRequested;
     private boolean mSurfaceAvailable;
     private CameraSource mCameraSource;
-
+    
     private GraphicOverlay mOverlay;
 
     public CameraSourcePreview(Context context, AttributeSet attrs) {
@@ -93,14 +93,41 @@ public class CameraSourcePreview extends ViewGroup {
                 Size size = mCameraSource.getPreviewSize();
                 int min = Math.min(size.getWidth(), size.getHeight());
                 int max = Math.max(size.getWidth(), size.getHeight());
+
+                int cameraWidth;
+                int cameraHeight;
+
                 if (isPortraitMode()) {
                     // Swap width and height sizes when in portrait, since it will be rotated by
                     // 90 degrees
+                    cameraHeight = max;
+                    cameraWidth = min;
                     mOverlay.setCameraInfo(min, max, mCameraSource.getCameraFacing());
+
                 } else {
+                    cameraHeight = min;
+                    cameraWidth = max;
                     mOverlay.setCameraInfo(max, min, mCameraSource.getCameraFacing());
                 }
                 mOverlay.clear();
+
+                int viewWidth = getWidth();
+                int viewHeight = getHeight();
+
+                if(viewHeight > cameraHeight) {
+                    cameraWidth = cameraWidth * viewHeight / cameraHeight;
+                    cameraHeight = viewHeight;
+                }
+
+                if(viewWidth > cameraWidth) {
+                    cameraHeight = cameraHeight * viewWidth / cameraWidth;
+                    cameraWidth = viewWidth;
+                }
+
+                for (int i = 0; i < getChildCount(); ++i) {
+                    getChildAt(i).layout(0, 0, cameraWidth, cameraHeight);
+                }
+
             }
             mStartRequested = false;
         }
