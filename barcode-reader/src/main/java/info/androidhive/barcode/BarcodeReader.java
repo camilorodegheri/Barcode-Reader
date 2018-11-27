@@ -382,6 +382,33 @@ public class BarcodeReader extends Fragment implements View.OnTouchListener, Bar
             }
         }
     }
+    
+    /**
+     * setFlash sets flaslight on or off.
+     *
+     * @param isActive - desired flashlight activity state
+     */
+    public setFlash(boolean isActive) {
+        if (mCameraSource != null) {
+            mCameraSource
+                .setFlashMode(isActive ? Camera.Parameters.FLASH_MODE_TORCH : null)
+        }
+    }
+    
+    /**
+     * isFlashActive returns flashlight activity state.
+     *
+     * @return true if the flashlight is on false if if the flashlight is off and null if the 
+     * mCameraSource is null.
+     */
+    public Boolean isFlashActive() {
+        if (mCameraSource != null) {
+            String flashMode = mCameraSource;
+            return !( flashMode == null || flashMode == Camera.Parameters.FLASH_MODE_OFF )
+        }
+        
+        return null;
+    }
 
     /**
      * onTap returns the tapped barcode result to the calling Activity.
