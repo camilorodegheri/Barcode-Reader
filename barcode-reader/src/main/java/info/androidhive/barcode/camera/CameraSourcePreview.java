@@ -180,6 +180,8 @@ public class CameraSourcePreview extends ViewGroup {
         } catch (IOException e) {
             Log.e(TAG, "Could not start camera source.", e);
         }
+
+
     }
 
     /*@Override
